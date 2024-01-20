@@ -1,4 +1,3 @@
-
 # Before Getting Started
 
 The goal of this project is to practice testing, but more importantly it is about practicing testing properly. The code for this project is nearly identical to the code for our form validation project. I did make a few minor modifications, though, so I would recommend downloading this code or just making the same modifications to your own code. Essentially, the only change I made was to make each form take in an `onSubmit` function that is called with the email/password instead of having those values automatically alerted. This change makes the project a bit more real world for testing purposes.
