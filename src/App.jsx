@@ -4,7 +4,7 @@ import { Header } from "./components/Header"
 import { createContext, useState } from "react"
 
 export const SkillContext = createContext()
-export const MathTypeContext = createContext()
+export const MathTypeContext = createContext() 
 
 function App() {
   const [skillLevel, setSkillLevel] = useState({
