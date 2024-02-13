@@ -1,7 +1,7 @@
 import { Math } from "./components/Math"
 import "./scss/styles.scss"
 import { Header } from "./components/Header"
-import { createContext, useState } from "react"
+import { createContext, useState } from "react" 
 
 export const SkillContext = createContext()
 export const MathTypeContext = createContext() 
