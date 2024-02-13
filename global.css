@@ -1,0 +1,12 @@
+body {
+  background: #3e8389;
+}
+
+p, h1, h2, h3, h4, button {
+  color: white;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.title {
+  text-align: center;
+}/*# sourceMappingURL=global.css.map */
