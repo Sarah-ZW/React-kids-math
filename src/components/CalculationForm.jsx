@@ -1,39 +1,57 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { MathTypeContext, SkillContext } from "../App"
-import amazingGif from '../assets/amazing.gif'
-import balloonsGif from '../assets/balloons.gif'
-import cactusGif from '../assets/cactus.gif'
-import carltonGif from '../assets/carlton.gif'
-import catGif from '../assets/cat.gif'
-import charlieBrownGif from '../assets/charlieBrown.gif'
-import confettiGif from '../assets/confetti.gif'
-import ducksGif from '../assets/ducks.gif'
-import highFiveGif from '../assets/highFive.gif'
-import monstersGif from '../assets/monsters.gif'
-import oprahGif from '../assets/oprah.gif'
-import thumbsupGif from '../assets/thumbsup.gif'
-import watermelonGif from '../assets/watermelon.gif'
-import yayGif from '../assets/yay.gif';
-import sadPug from '../assets/sadPug.gif';
+import amazingGif from "../assets/amazing.gif"
+import balloonsGif from "../assets/balloons.gif"
+import cactusGif from "../assets/cactus.gif"
+import carltonGif from "../assets/carlton.gif"
+import catGif from "../assets/cat.gif"
+import charlieBrownGif from "../assets/charlieBrown.gif"
+import confettiGif from "../assets/confetti.gif"
+import ducksGif from "../assets/ducks.gif"
+import highFiveGif from "../assets/highFive.gif"
+import monstersGif from "../assets/monsters.gif"
+import oprahGif from "../assets/oprah.gif"
+import thumbsupGif from "../assets/thumbsup.gif"
+import watermelonGif from "../assets/watermelon.gif"
+import yayGif from "../assets/yay.gif"
+import sadPug from "../assets/sadPug.gif"
 
 export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
   const { mathType, setMathType } = useContext(MathTypeContext)
+  const [lastAnswerCorrect, setLastAnswerCorrect] = useState(true)
+  const [triggerNewNumber, setTriggerNewNumber] = useState(true)
   const [showGif, setShowGif] = useState(false)
   const [sadGif, setSadGif] = useState(false)
-  const [currentGif, setCurrentGif] = useState('')
+  const [currentGif, setCurrentGif] = useState("")
   const answerRef = useRef(null)
+  const savedNumber1Ref = useRef(
+    Math.floor(Math.random() * skillLevel.multiplier)
+  )
+  const savedNumber2Ref = useRef(
+    Math.floor(Math.random() * skillLevel.multiplier)
+  )
 
   useEffect(() => {
     answerRef.current.focus()
   }, [setSkillLevel])
 
-  const randomNumber1 = Math.floor(Math.random() * skillLevel.multiplier)
-  const randomNumber2 = Math.floor(Math.random() * skillLevel.multiplier)
+  useEffect(() => {
+    if (lastAnswerCorrect) {
+      savedNumber1Ref.current = Math.floor(
+        Math.random() * skillLevel.multiplier
+      )
+      savedNumber2Ref.current = Math.floor(
+        Math.random() * skillLevel.multiplier
+      )
+    }
+  }, [triggerNewNumber, lastAnswerCorrect, skillLevel])
+
+  const randomNumber1 = savedNumber1Ref.current
+  const randomNumber2 = savedNumber2Ref.current
   const operation = mathType.operation
   const divisibleNumber = generateDivisibleNumber()
-  
-  
+
   const gifs = [
     amazingGif,
     balloonsGif,
@@ -48,15 +66,14 @@ export function CalculationForm() {
     oprahGif,
     thumbsupGif,
     watermelonGif,
-    yayGif
-  ];
+    yayGif,
+  ]
 
+  const getRandomGif = () => {
+    const randomIndex = Math.floor(Math.random() * gifs.length)
+    setCurrentGif(gifs[randomIndex])
+  }
 
-    const getRandomGif = () => {
-      const randomIndex = Math.floor(Math.random() * gifs.length);
-      setCurrentGif(gifs[randomIndex]);
-    }
-    
   function generateDivisibleNumber() {
     let divisibleNumber
     do {
@@ -92,6 +109,8 @@ export function CalculationForm() {
 
     if (parseInt(answerRef.current.value, 10) === correctResult) {
       isCorrect = true
+      setLastAnswerCorrect(true)
+      setTriggerNewNumber((prevValue) => !prevValue)
       getRandomGif()
       setShowGif(true)
 
@@ -100,12 +119,14 @@ export function CalculationForm() {
       }, 2000)
     } else {
       isCorrect = false
+      setLastAnswerCorrect(false)
       setSadGif(true)
 
       setTimeout(() => {
         setSadGif(false)
       }, 2000)
     }
+
     answerRef.current.value = ""
     console.log(correctResult)
 
@@ -117,10 +138,9 @@ export function CalculationForm() {
 
   return (
     <>
-      
       <form className="form" onSubmit={onSubmit}>
-      {showGif && <img className="gif" src={currentGif} alt="Random gif" />}
-      {sadGif && <img className="gif" src={sadPug} alt="Sad pug" />}
+        {showGif && <img className="gif" src={currentGif} alt="Random gif" />}
+        {sadGif && <img className="gif" src={sadPug} alt="Sad pug" />}
         <div className="labelInput">
           <label htmlFor="box1">Number</label>
           <input value={randomNumber1} type="number" disabled id="box1" />
