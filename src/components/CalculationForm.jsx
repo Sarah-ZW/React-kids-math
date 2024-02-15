@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { MathTypeContext, SkillContext } from "../App"
 import amazingGif from "../assets/amazing.gif"
 import balloonsGif from "../assets/balloons.gif"
@@ -23,6 +23,9 @@ export function CalculationForm() {
   const [randomNumber2, setRandomNumber2] = useState(generateRandomNumber())
   const [divisibleNumber, setDivisibleNumber] = useState(
     generateDivisibleNumber()
+  )
+  const [subtractNumber, setSubtractNumber] = useState(
+    generateSubtractableNumber()
   )
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(true)
   const [triggerNewNumber, setTriggerNewNumber] = useState(true)
@@ -52,29 +55,33 @@ export function CalculationForm() {
     setDivisibleNumber(generateDivisibleNumber())
   }, [randomNumber1])
 
+  useEffect(() => {
+    setSubtractNumber(generateSubtractableNumber())
+  }, [randomNumber1])
+
   const operation = mathType.operation
 
-  const gifs = [
-    amazingGif,
-    balloonsGif,
-    cactusGif,
-    carltonGif,
-    catGif,
-    charlieBrownGif,
-    confettiGif,
-    ducksGif,
-    highFiveGif,
-    monstersGif,
-    oprahGif,
-    thumbsupGif,
-    watermelonGif,
-    yayGif,
-  ]
+  const getRandomGif = useCallback(() => {
+    const gifs = [
+      amazingGif,
+      balloonsGif,
+      cactusGif,
+      carltonGif,
+      catGif,
+      charlieBrownGif,
+      confettiGif,
+      ducksGif,
+      highFiveGif,
+      monstersGif,
+      oprahGif,
+      thumbsupGif,
+      watermelonGif,
+      yayGif,
+    ]
 
-  const getRandomGif = () => {
     const randomIndex = Math.floor(Math.random() * gifs.length)
     setCurrentGif(gifs[randomIndex])
-  }
+  }, [])
 
   function generateDivisibleNumber() {
     let divisibleNumber
@@ -82,6 +89,14 @@ export function CalculationForm() {
       divisibleNumber = generateRandomNumber()
     } while (randomNumber1 % divisibleNumber != 0)
     return divisibleNumber
+  }
+
+  function generateSubtractableNumber() {
+    let subtNumber
+    do {
+      subtNumber = generateRandomNumber()
+    } while (randomNumber1 <= subtNumber)
+    return subtNumber
   }
 
   function generateRandomNumber() {
@@ -99,7 +114,7 @@ export function CalculationForm() {
         correctResult = randomNumber1 + randomNumber2
         break
       case "-":
-        correctResult = randomNumber1 - randomNumber2
+        correctResult = randomNumber1 - subtractNumber
         break
       case "x":
         correctResult = randomNumber1 * randomNumber2
@@ -154,7 +169,13 @@ export function CalculationForm() {
           <label htmlFor="box2">Number</label>
           <input
             type="number"
-            value={operation === "/" ? divisibleNumber : randomNumber2}
+            value={
+              operation === "/"
+                ? divisibleNumber
+                : operation === "-"
+                ? subtractNumber
+                : randomNumber2
+            }
             disabled
             id="box2"
           />
