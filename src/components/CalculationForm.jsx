@@ -19,38 +19,40 @@ import sadPug from "../assets/sadPug.gif"
 export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
   const { mathType, setMathType } = useContext(MathTypeContext)
+  const [randomNumber1, setRandomNumber1] = useState(generateRandomNumber())
+  const [randomNumber2, setRandomNumber2] = useState(generateRandomNumber())
+  const [divisibleNumber, setDivisibleNumber] = useState(
+    generateDivisibleNumber()
+  )
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(true)
   const [triggerNewNumber, setTriggerNewNumber] = useState(true)
   const [showGif, setShowGif] = useState(false)
   const [sadGif, setSadGif] = useState(false)
   const [currentGif, setCurrentGif] = useState("")
   const answerRef = useRef(null)
-  const savedNumber1Ref = useRef(
-    Math.floor(Math.random() * skillLevel.multiplier)
-  )
-  const savedNumber2Ref = useRef(
-    Math.floor(Math.random() * skillLevel.multiplier)
-  )
 
   useEffect(() => {
     answerRef.current.focus()
-  }, [setSkillLevel])
+  }, [])
+
+  useEffect(() => {
+    setRandomNumber1(Math.floor(Math.random() * skillLevel.multiplier))
+    setRandomNumber2(Math.floor(Math.random() * skillLevel.multiplier))
+    answerRef.current.focus()
+  }, [skillLevel, mathType])
 
   useEffect(() => {
     if (lastAnswerCorrect) {
-      savedNumber1Ref.current = Math.floor(
-        Math.random() * skillLevel.multiplier
-      )
-      savedNumber2Ref.current = Math.floor(
-        Math.random() * skillLevel.multiplier
-      )
+      setRandomNumber1(generateRandomNumber())
+      setRandomNumber2(generateRandomNumber())
     }
   }, [triggerNewNumber, lastAnswerCorrect, skillLevel])
 
-  const randomNumber1 = savedNumber1Ref.current
-  const randomNumber2 = savedNumber2Ref.current
+  useEffect(() => {
+    setDivisibleNumber(generateDivisibleNumber())
+  }, [randomNumber1])
+
   const operation = mathType.operation
-  const divisibleNumber = generateDivisibleNumber()
 
   const gifs = [
     amazingGif,
@@ -128,7 +130,7 @@ export function CalculationForm() {
     }
 
     answerRef.current.value = ""
-    console.log(correctResult)
+    answerRef.current.focus()
 
     if (isCorrect) {
       //setting state just to force rerender to create new random #'s
