@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react"
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { MathTypeContext, SkillContext } from "../App"
 import amazingGif from "../assets/amazing.gif"
 import balloonsGif from "../assets/balloons.gif"
@@ -20,13 +27,13 @@ export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
   const { mathType, setMathType } = useContext(MathTypeContext)
   const [randomNumber1, setRandomNumber1] = useState(generateRandomNumber())
-  const [randomNumber2, setRandomNumber2] = useState(generateRandomNumber())
-  const [divisibleNumber, setDivisibleNumber] = useState(
-    generateDivisibleNumber()
-  )
-  const [subtractNumber, setSubtractNumber] = useState(
-    generateSubtractableNumber()
-  )
+  // const [randomNumber2, setRandomNumber2] = useState(generateRandomNumber())
+  // const [divisibleNumber, setDivisibleNumber] = useState(
+  //   generateDivisibleNumber()
+  // )
+  // const [subtractNumber, setSubtractNumber] = useState(
+  //   generateSubtractableNumber()
+  // )
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(true)
   const [triggerNewNumber, setTriggerNewNumber] = useState(true)
   const [showGif, setShowGif] = useState(false)
@@ -34,30 +41,51 @@ export function CalculationForm() {
   const [currentGif, setCurrentGif] = useState("")
   const answerRef = useRef(null)
 
+  const randomNumber2 = useMemo(() => {
+    if (mathType.type === "division") {
+      let divisibleNumber
+      do {
+        divisibleNumber = generateRandomNumber()
+      } while (randomNumber1 % divisibleNumber !== 0)
+      return divisibleNumber
+    } else if (mathType.type === "subtraction") {
+      let subtractableNumber = generateRandomNumber()
+      if (subtractableNumber > randomNumber1) {
+        const tempNumber = subtractableNumber
+        subtractableNumber = randomNumber1
+        setRandomNumber1(tempNumber)
+      }
+      return subtractableNumber
+    } else {
+      return generateRandomNumber()
+    }
+  }, [mathType, randomNumber1])
+
   useEffect(() => {
     answerRef.current.focus()
   }, [])
 
   useEffect(() => {
     setRandomNumber1(Math.floor(Math.random() * skillLevel.multiplier))
-    setRandomNumber2(Math.floor(Math.random() * skillLevel.multiplier))
+    // setRandomNumber2(Math.floor(Math.random() * skillLevel.multiplier))
     answerRef.current.focus()
   }, [skillLevel, mathType])
 
   useEffect(() => {
     if (lastAnswerCorrect) {
       setRandomNumber1(generateRandomNumber())
-      setRandomNumber2(generateRandomNumber())
+      // setRandomNumber2(generateRandomNumber())
     }
-  }, [triggerNewNumber, lastAnswerCorrect, skillLevel])
+  }, [triggerNewNumber])
 
-  useEffect(() => {
-    setDivisibleNumber(generateDivisibleNumber())
-  }, [randomNumber1])
-
-  useEffect(() => {
-    setSubtractNumber(generateSubtractableNumber())
-  }, [randomNumber1])
+  // useEffect(() => {
+  //   if (mathType.type === "division") {
+  //     setDivisibleNumber(generateDivisibleNumber())
+  //   } else if (mathType.type === "subtraction") {
+  //     setSubtractNumber(generateSubtractableNumber())
+  //     console.log("Im getting called")
+  //   }
+  // }, [triggerNewNumber, skillLevel, mathType])
 
   const operation = mathType.operation
 
@@ -83,21 +111,31 @@ export function CalculationForm() {
     setCurrentGif(gifs[randomIndex])
   }, [])
 
-  function generateDivisibleNumber() {
-    let divisibleNumber
-    do {
-      divisibleNumber = generateRandomNumber()
-    } while (randomNumber1 % divisibleNumber != 0)
-    return divisibleNumber
-  }
+  // function generateDivisibleNumber() {
+  //   if (mathType.type === "division") {
+  //     let divisibleNumber
+  //     do {
+  //       divisibleNumber = generateRandomNumber()
+  //     } while (randomNumber1 % divisibleNumber != 0)
+  //     return divisibleNumber
+  //   }
+  // }
 
-  function generateSubtractableNumber() {
-    let subtNumber
-    do {
-      subtNumber = generateRandomNumber()
-    } while (randomNumber1 <= subtNumber)
-    return subtNumber
-  }
+  // function generateSubtractableNumber() {
+  //   if (mathType.type === "subtraction") {
+  //     let subtractableNumber = generateRandomNumber()
+  //     if (subtractableNumber > randomNumber1) {
+  //       const tempNumber = subtractableNumber
+  //       subtractableNumber = randomNumber1
+  //       setRandomNumber1(tempNumber)
+  //     }
+  //     return subtractableNumber
+  //   }
+  // }
+
+  // the problem is things are depending on the generated random value 1 for subtraction and vision
+  // could I make randomNumber2 a const and calculate it based off of randomNumber 1
+  //and account for division and subtraction with if statements?
 
   function generateRandomNumber() {
     return Math.floor(Math.random() * skillLevel.multiplier)
@@ -114,13 +152,13 @@ export function CalculationForm() {
         correctResult = randomNumber1 + randomNumber2
         break
       case "-":
-        correctResult = randomNumber1 - subtractNumber
+        correctResult = randomNumber1 - randomNumber2
         break
       case "x":
         correctResult = randomNumber1 * randomNumber2
         break
       case "/":
-        correctResult = randomNumber1 / divisibleNumber
+        correctResult = randomNumber1 / randomNumber2
         break
     }
 
@@ -167,18 +205,7 @@ export function CalculationForm() {
 
         <div className="labelInput">
           <label htmlFor="box2">Number</label>
-          <input
-            type="number"
-            value={
-              operation === "/"
-                ? divisibleNumber
-                : operation === "-"
-                ? subtractNumber
-                : randomNumber2
-            }
-            disabled
-            id="box2"
-          />
+          <input type="number" value={randomNumber2} disabled id="box2" />
         </div>
 
         <div className="operator">=</div>
