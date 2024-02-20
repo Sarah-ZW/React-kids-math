@@ -27,13 +27,7 @@ export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
   const { mathType, setMathType } = useContext(MathTypeContext)
   const [randomNumber1, setRandomNumber1] = useState(generateRandomNumber())
-  // const [randomNumber2, setRandomNumber2] = useState(generateRandomNumber())
-  // const [divisibleNumber, setDivisibleNumber] = useState(
-  //   generateDivisibleNumber()
-  // )
-  // const [subtractNumber, setSubtractNumber] = useState(
-  //   generateSubtractableNumber()
-  // )
+
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(true)
   const [triggerNewNumber, setTriggerNewNumber] = useState(true)
   const [showGif, setShowGif] = useState(false)
@@ -67,25 +61,14 @@ export function CalculationForm() {
 
   useEffect(() => {
     setRandomNumber1(Math.floor(Math.random() * skillLevel.multiplier))
-    // setRandomNumber2(Math.floor(Math.random() * skillLevel.multiplier))
     answerRef.current.focus()
   }, [skillLevel, mathType])
 
   useEffect(() => {
     if (lastAnswerCorrect) {
       setRandomNumber1(generateRandomNumber())
-      // setRandomNumber2(generateRandomNumber())
     }
   }, [triggerNewNumber])
-
-  // useEffect(() => {
-  //   if (mathType.type === "division") {
-  //     setDivisibleNumber(generateDivisibleNumber())
-  //   } else if (mathType.type === "subtraction") {
-  //     setSubtractNumber(generateSubtractableNumber())
-  //     console.log("Im getting called")
-  //   }
-  // }, [triggerNewNumber, skillLevel, mathType])
 
   const operation = mathType.operation
 
@@ -110,32 +93,6 @@ export function CalculationForm() {
     const randomIndex = Math.floor(Math.random() * gifs.length)
     setCurrentGif(gifs[randomIndex])
   }, [])
-
-  // function generateDivisibleNumber() {
-  //   if (mathType.type === "division") {
-  //     let divisibleNumber
-  //     do {
-  //       divisibleNumber = generateRandomNumber()
-  //     } while (randomNumber1 % divisibleNumber != 0)
-  //     return divisibleNumber
-  //   }
-  // }
-
-  // function generateSubtractableNumber() {
-  //   if (mathType.type === "subtraction") {
-  //     let subtractableNumber = generateRandomNumber()
-  //     if (subtractableNumber > randomNumber1) {
-  //       const tempNumber = subtractableNumber
-  //       subtractableNumber = randomNumber1
-  //       setRandomNumber1(tempNumber)
-  //     }
-  //     return subtractableNumber
-  //   }
-  // }
-
-  // the problem is things are depending on the generated random value 1 for subtraction and vision
-  // could I make randomNumber2 a const and calculate it based off of randomNumber 1
-  //and account for division and subtraction with if statements?
 
   function generateRandomNumber() {
     return Math.floor(Math.random() * skillLevel.multiplier)
@@ -196,23 +153,27 @@ export function CalculationForm() {
       <form className="form" onSubmit={onSubmit}>
         {showGif && <img className="gif" src={currentGif} alt="Random gif" />}
         {sadGif && <img className="gif" src={sadPug} alt="Sad pug" />}
-        <div className="labelInput">
-          <label htmlFor="box1">Number</label>
-          <input value={randomNumber1} type="number" disabled id="box1" />
+
+        <div className="firstInputs">
+          <div className="labelInput">
+            <label htmlFor="box1">Number</label>
+            <input value={randomNumber1} type="number" disabled id="box1" />
+          </div>
+
+          <div className="operator">{operation}</div>
+
+          <div className="labelInput">
+            <label htmlFor="box2">Number</label>
+            <input type="number" value={randomNumber2} disabled id="box2" />
+          </div>
         </div>
 
-        <div className="operator">{operation}</div>
-
-        <div className="labelInput">
-          <label htmlFor="box2">Number</label>
-          <input type="number" value={randomNumber2} disabled id="box2" />
-        </div>
-
-        <div className="operator">=</div>
-
-        <div className="labelInput">
-          <label htmlFor="answerBox">Answer</label>
-          <input type="number" id="answerBox" ref={answerRef} />
+        <div className="equalAnswer">
+          <div className="operator">=</div>
+          <div className="labelInput">
+            <label htmlFor="answerBox">Answer</label>
+            <input type="number" id="answerBox" ref={answerRef} />
+          </div>
         </div>
 
         <button className="submit" type="submit">
