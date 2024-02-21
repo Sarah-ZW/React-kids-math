@@ -1,10 +1,10 @@
-import { Math } from "./components/Math"
+import { Math } from "./components/Form/Math"
 import "./scss/styles.scss"
-import { Header } from "./components/Header"
-import { createContext, useState } from "react" 
+import { Header } from "./components/Header/Header"
+import { createContext, useState } from "react"
 
 export const SkillContext = createContext()
-export const MathTypeContext = createContext()   
+export const MathTypeContext = createContext()
 
 function App() {
   const [skillLevel, setSkillLevel] = useState({

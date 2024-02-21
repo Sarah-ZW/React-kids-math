@@ -1,0 +1,65 @@
+@media all and (min-width: 0px) {
+  .Header {
+    display: flex;
+    justify-content: space-between;
+
+    h1 {
+      margin: 0;
+      height: 10%;
+      text-align: center;
+    }
+    button {
+      padding: 5px 10px;
+      font-size: 1rem;
+      // margin-right: 10px;
+      // margin-bottom: 20px;
+      width: 80%;
+      margin: 0 auto 20px;
+    }
+
+    #chooseMathType,
+    #skillLevel {
+      display: flex;
+      flex-direction: column;
+      width: 70%;
+      margin: 100px auto 0;
+    }
+  }
+}
+
+@media all and (min-width: 961px) {
+  .Header {
+    button {
+      font-size: 1.5rem;
+      padding: 7px 14px;
+      margin: 5px;
+    }
+    #skillLevel,
+    #chooseMathType {
+      margin: 5px;
+      flex-direction: row;
+      column-gap: 5px;
+      flex-wrap: wrap;
+      width: auto;
+      justify-content: center;
+    }
+    button {
+      width: auto;
+    }
+  }
+}
+
+@media all and (min-width: 1150px) {
+  .Header {
+    #skillLevel,
+    #chooseMathType {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1.5rem;
+    }
+  }
+}
