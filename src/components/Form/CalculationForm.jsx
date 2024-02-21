@@ -7,22 +7,9 @@ import {
   useState,
 } from "react"
 import { MathTypeContext, SkillContext } from "../../App"
-import amazingGif from "../../assets/amazing.gif"
-import balloonsGif from "../../assets/balloons.gif"
-import cactusGif from "../../assets/cactus.gif"
-import carltonGif from "../../assets/carlton.gif"
-import catGif from "../../assets/cat.gif"
-import charlieBrownGif from "../../assets/charlieBrown.gif"
-import confettiGif from "../../assets/confetti.gif"
-import ducksGif from "../../assets/ducks.gif"
-import highFiveGif from "../../assets/highFive.gif"
-import monstersGif from "../../assets/monsters.gif"
-import oprahGif from "../../assets/oprah.gif"
-import thumbsupGif from "../../assets/thumbsup.gif"
-import watermelonGif from "../../assets/watermelon.gif"
-import yayGif from "../../assets/yay.gif"
 import sadPug from "../../assets/sadPug.gif"
 import { Gif } from "./Gif/Gif"
+import { getRandomGif } from "./Gif/gifUtils"
 
 export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
@@ -71,26 +58,8 @@ export function CalculationForm() {
     }
   }, [triggerNewNumber])
 
-  const getRandomGif = useCallback(() => {
-    const gifs = [
-      amazingGif,
-      balloonsGif,
-      cactusGif,
-      carltonGif,
-      catGif,
-      charlieBrownGif,
-      confettiGif,
-      ducksGif,
-      highFiveGif,
-      monstersGif,
-      oprahGif,
-      thumbsupGif,
-      watermelonGif,
-      yayGif,
-    ]
-
-    const randomIndex = Math.floor(Math.random() * gifs.length)
-    setCurrentGif(gifs[randomIndex])
+  const handleRandomGif = useCallback(() => {
+    setCurrentGif(getRandomGif())
   }, [])
 
   function generateRandomNumber() {
@@ -122,7 +91,7 @@ export function CalculationForm() {
       isCorrect = true
       setLastAnswerCorrect(true)
       setTriggerNewNumber((prevValue) => !prevValue)
-      getRandomGif()
+      handleRandomGif()
       setShowGif(true)
 
       setTimeout(() => {
