@@ -22,18 +22,19 @@ import thumbsupGif from "../../assets/thumbsup.gif"
 import watermelonGif from "../../assets/watermelon.gif"
 import yayGif from "../../assets/yay.gif"
 import sadPug from "../../assets/sadPug.gif"
+import { Gif } from "./Gif/Gif"
 
 export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
   const { mathType, setMathType } = useContext(MathTypeContext)
   const [randomNumber1, setRandomNumber1] = useState(generateRandomNumber())
-
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(true)
   const [triggerNewNumber, setTriggerNewNumber] = useState(true)
   const [showGif, setShowGif] = useState(false)
   const [sadGif, setSadGif] = useState(false)
   const [currentGif, setCurrentGif] = useState("")
   const answerRef = useRef(null)
+  const operation = mathType.operation
 
   const randomNumber2 = useMemo(() => {
     if (mathType.type === "division") {
@@ -69,8 +70,6 @@ export function CalculationForm() {
       setRandomNumber1(generateRandomNumber())
     }
   }, [triggerNewNumber])
-
-  const operation = mathType.operation
 
   const getRandomGif = useCallback(() => {
     const gifs = [
@@ -151,8 +150,12 @@ export function CalculationForm() {
   return (
     <>
       <form className="form" onSubmit={onSubmit}>
-        {showGif && <img className="gif" src={currentGif} alt="Random gif" />}
-        {sadGif && <img className="gif" src={sadPug} alt="Sad pug" />}
+        <Gif
+          showGif={showGif}
+          currentGif={currentGif}
+          sadGif={sadGif}
+          sadPug={sadPug}
+        />
 
         <div className="firstInputs">
           <div className="labelInput">
