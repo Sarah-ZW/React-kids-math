@@ -18,6 +18,7 @@ export function CalculationForm() {
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(true)
   const [triggerNewNumber, setTriggerNewNumber] = useState(true)
   const [showGif, setShowGif] = useState(false)
+  const [loaded, setLoaded] = useState(false)
   const [sadGif, setSadGif] = useState(false)
   const [currentGif, setCurrentGif] = useState("")
   const answerRef = useRef(null)
@@ -66,6 +67,10 @@ export function CalculationForm() {
     return Math.floor(Math.random() * skillLevel.multiplier)
   }
 
+  function handleLoad() {
+    setLoaded(true);
+  }
+
   function onSubmit(e) {
     e.preventDefault()
 
@@ -94,17 +99,12 @@ export function CalculationForm() {
       handleRandomGif()
       setShowGif(true)
 
-      setTimeout(() => {
-        setShowGif(false)
-      }, 2000)
+      
     } else {
       isCorrect = false
       setLastAnswerCorrect(false)
       setSadGif(true)
 
-      setTimeout(() => {
-        setSadGif(false)
-      }, 2000)
     }
 
     answerRef.current.value = ""
@@ -124,6 +124,11 @@ export function CalculationForm() {
           currentGif={currentGif}
           sadGif={sadGif}
           sadPug={sadPug}
+          handleLoad = {handleLoad}
+          loaded = {loaded}
+          setLoaded = {setLoaded}
+          setShowGif = {setShowGif}
+          setSadGif={setSadGif}
         />
 
         <div className="firstInputs">
