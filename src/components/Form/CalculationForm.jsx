@@ -10,6 +10,7 @@ import { MathTypeContext, SkillContext } from "../../App"
 import sadPug from "../../assets/sadPug.gif"
 import { Gif } from "./Gif/Gif"
 import { getRandomGif } from "./Gif/gifUtils"
+import { LevelStats } from "./Levels/LevelStats"
 
 export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
@@ -21,8 +22,14 @@ export function CalculationForm() {
   const [loaded, setLoaded] = useState(false)
   const [sadGif, setSadGif] = useState(false)
   const [currentGif, setCurrentGif] = useState("")
+  const [begAddLevel, setBegAddLevel] = useState(0)
+  const [begSubLevel, setBegSubLevel] = useState(0)
+  const [begMulLevel, setBegMulLevel] = useState(0)
+  const [begDivLevel, setBegDivLevel] = useState(0)
+  const streakRef = useRef(0)
   const answerRef = useRef(null)
   const operation = mathType.operation
+  const category = `${skillLevel.skill}-${mathType.type}`
 
   const randomNumber2 = useMemo(() => {
     if (mathType.type === "division") {
@@ -68,7 +75,7 @@ export function CalculationForm() {
   }
 
   function handleLoad() {
-    setLoaded(true);
+    setLoaded(true)
   }
 
   function onSubmit(e) {
@@ -95,16 +102,42 @@ export function CalculationForm() {
     if (parseInt(answerRef.current.value, 10) === correctResult) {
       isCorrect = true
       setLastAnswerCorrect(true)
+      streakRef.current += 1
+
+      if (streakRef.current === 2) {
+        switch (category) {
+          case "beginner-addition":
+            setBegAddLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "beginner-subtraction":
+            setBegSubLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "beginner-multiplication":
+            setBegMulLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "beginner-division":
+            setBegDivLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          default:
+            break
+        }
+      } else if (streakRef.current > 2) {
+        alert(
+          "there is an error where the streak value is greater than the limit"
+        )
+      }
       setTriggerNewNumber((prevValue) => !prevValue)
       handleRandomGif()
       setShowGif(true)
-
-      
     } else {
       isCorrect = false
       setLastAnswerCorrect(false)
       setSadGif(true)
-
+      streakRef.current = 0
     }
 
     answerRef.current.value = ""
@@ -124,10 +157,10 @@ export function CalculationForm() {
           currentGif={currentGif}
           sadGif={sadGif}
           sadPug={sadPug}
-          handleLoad = {handleLoad}
-          loaded = {loaded}
-          setLoaded = {setLoaded}
-          setShowGif = {setShowGif}
+          handleLoad={handleLoad}
+          loaded={loaded}
+          setLoaded={setLoaded}
+          setShowGif={setShowGif}
           setSadGif={setSadGif}
         />
 
@@ -157,6 +190,13 @@ export function CalculationForm() {
           Submit
         </button>
       </form>
+      <LevelStats
+        streakRef={streakRef}
+        begAddLevel={begAddLevel}
+        begSubLevel={begSubLevel}
+        begMulLevel={begMulLevel}
+        begDivLevel={begDivLevel}
+      />
     </>
   )
 }

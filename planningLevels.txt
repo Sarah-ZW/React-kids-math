@@ -1,0 +1,11 @@
+Levels for each mathType/SkillLevel combination
+
+Level is a count stored in localStorage
+Maybe there's a button underneath MathType "Show Levels" that changes to "Hide Levels" when clicked and it also acts like an anchor tag as well.
+try to figure out one mathType/SkillLevel first to display
+
+See instructions button
+
+10 in a row correct means you beat that level.
+
+Get to level 5 in each category to win the game!
