@@ -26,6 +26,14 @@ export function CalculationForm() {
   const [begSubLevel, setBegSubLevel] = useState(0)
   const [begMulLevel, setBegMulLevel] = useState(0)
   const [begDivLevel, setBegDivLevel] = useState(0)
+  const [medAddLevel, setMedAddLevel] = useState(0)
+  const [medSubLevel, setMedSubLevel] = useState(0)
+  const [medMulLevel, setMedMulLevel] = useState(0)
+  const [medDivLevel, setMedDivLevel] = useState(0)
+  const [advAddLevel, setAdvAddLevel] = useState(0)
+  const [advSubLevel, setAdvSubLevel] = useState(0)
+  const [advMulLevel, setAdvMulLevel] = useState(0)
+  const [advDivLevel, setAdvDivLevel] = useState(0)
   const streakRef = useRef(0)
   const answerRef = useRef(null)
   const operation = mathType.operation
@@ -58,6 +66,7 @@ export function CalculationForm() {
   useEffect(() => {
     setRandomNumber1(Math.floor(Math.random() * skillLevel.multiplier))
     answerRef.current.focus()
+    streakRef.current = 0
   }, [skillLevel, mathType])
 
   useEffect(() => {
@@ -122,6 +131,38 @@ export function CalculationForm() {
             setBegDivLevel((currentLevel) => currentLevel + 1)
             streakRef.current = 0
             break
+          case "intermediate-addition":
+            setMedAddLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "intermediate-subtraction":
+            setMedSubLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "intermediate-multiplication":
+            setMedMulLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "intermediate-division":
+            setMedDivLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "advanced-addition":
+            setAdvAddLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "advanced-subtraction":
+            setAdvSubLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "advanced-multiplication":
+            setAdvMulLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
+          case "advanced-division":
+            setAdvDivLevel((currentLevel) => currentLevel + 1)
+            streakRef.current = 0
+            break
           default:
             break
         }
@@ -134,7 +175,7 @@ export function CalculationForm() {
       handleRandomGif()
       setShowGif(true)
     } else {
-      isCorrect = false
+      // isCorrect = false
       setLastAnswerCorrect(false)
       setSadGif(true)
       streakRef.current = 0
@@ -143,10 +184,10 @@ export function CalculationForm() {
     answerRef.current.value = ""
     answerRef.current.focus()
 
-    if (isCorrect) {
-      //setting state just to force rerender to create new random #'s
-      setSkillLevel({ ...skillLevel })
-    }
+    // if (isCorrect) {
+    //   //setting state just to force rerender to create new random #'s
+    //   setSkillLevel({ ...skillLevel })
+    // }
   }
 
   return (
@@ -196,6 +237,14 @@ export function CalculationForm() {
         begSubLevel={begSubLevel}
         begMulLevel={begMulLevel}
         begDivLevel={begDivLevel}
+        medAddLevel={medAddLevel}
+        medSubLevel={medSubLevel}
+        medMulLevel={medMulLevel}
+        medDivLevel={medDivLevel}
+        advAddLevel={advAddLevel}
+        advSubLevel={advSubLevel}
+        advMulLevel={advMulLevel}
+        advDivLevel={advDivLevel}
       />
     </>
   )
