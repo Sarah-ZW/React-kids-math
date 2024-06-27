@@ -20,7 +20,14 @@ div {
 .flex-row {
   display: flex;
   align-items: center;
-  column-gap: 50px;
+  column-gap: 20px;
   width: 100%;
   justify-content: center;
+}
+
+@media all and (min-width: 769px) {
+  .flex-row {
+    column-gap: 50px;
+  }
+  
 }
