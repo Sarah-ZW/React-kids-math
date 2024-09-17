@@ -11,6 +11,7 @@ import sadPug from "../../assets/sadPug.gif"
 import { Gif } from "./Gif/Gif"
 import { getRandomGif } from "./Gif/gifUtils"
 import { LevelStats } from "./Levels/LevelStats"
+import { CurrentStreak } from "./Streak/CurrentStreak"
 
 export function CalculationForm() {
   const { skillLevel, setSkillLevel } = useContext(SkillContext)
@@ -113,7 +114,7 @@ export function CalculationForm() {
       setLastAnswerCorrect(true)
       streakRef.current += 1
 
-      if (streakRef.current === 2) {
+      if (streakRef.current === 10) {
         switch (category) {
           case "beginner-addition":
             setBegAddLevel((currentLevel) => currentLevel + 1)
@@ -166,7 +167,7 @@ export function CalculationForm() {
           default:
             break
         }
-      } else if (streakRef.current > 2) {
+      } else if (streakRef.current > 10) {
         alert(
           "there is an error where the streak value is greater than the limit"
         )
@@ -183,11 +184,6 @@ export function CalculationForm() {
 
     answerRef.current.value = ""
     answerRef.current.focus()
-
-    // if (isCorrect) {
-    //   //setting state just to force rerender to create new random #'s
-    //   setSkillLevel({ ...skillLevel })
-    // }
   }
 
   return (
@@ -231,6 +227,7 @@ export function CalculationForm() {
           Submit
         </button>
       </form>
+      <CurrentStreak streakRef={streakRef} />
       <LevelStats
         streakRef={streakRef}
         begAddLevel={begAddLevel}
